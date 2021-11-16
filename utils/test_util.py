@@ -8,6 +8,7 @@ import torch.distributed as dist
 
 from . import dist_util, logger
 from .debug_util import *
+from .train_util import parse_resume_step_from_filename
 
 
 class TestLoop:
@@ -32,6 +33,7 @@ class TestLoop:
 
         self.global_batch = self.batch_size * dist.get_world_size()  # seems to be useless.
 
+        self.resume_step = 0  # it will be changed in self._load_parameters(). We use it to indicate which model.
         self._load_parameters()
         if self.debug_mode:
             logger.log(f"This model contains {count_parameters_in_M(self.model)}M parameters")
@@ -43,6 +45,7 @@ class TestLoop:
 
     # ytxie: We use the simplest method to load model parameters.
     def _load_parameters(self):
+        self.resume_step = parse_resume_step_from_filename(self.resume_checkpoint)
         logger.log(f"loading model from checkpoint: {self.resume_checkpoint}...")
         self.model.load_state_dict(
             th.load(
