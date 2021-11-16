@@ -33,7 +33,7 @@ GD_FLAGS="--diffusion_steps 1000 --noise_schedule linear --learn_sigma True --ti
 SCRIPT_FLAGS="--log_dir logs/ddpm_sr/step_250 --output_dir outputs/ddpm_sr/step_250 \
 --data_dir ../datasets/imagenet/train --model_path checkpoints/ddpm_sr/64_256_upsampler.pt \
 --to_sample_images_dict_path data/to_sample_data_info.pkl \
---num_samples_per_image 5 --batch_size 5"
+--num_samples_per_image 1 --batch_size 1"
 
 python -m torch.distributed.launch \
 --nnodes=1 \
