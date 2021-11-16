@@ -16,7 +16,7 @@
 module add anaconda/3
 source activate pytorch1.9
 python ../get_device_configuration_info.py --slurm_file run.slurm
-file=../slurm_param.txt
+file=../slurm_params.txt
 line=($(awk 'NR==1 {print $0}' $file))
 nproc_per_node=${line:15}
 line=($(awk 'NR==2 {print $0}' $file))
@@ -24,7 +24,7 @@ master_addr=${line:12}
 line=($(awk 'NR==3 {print $0}' $file))
 master_port=${line:12}
 
-cd Home/ytxie/theorem-1-verification
+cd /home/ytxie/theorem-1-verification-python
 
 MODEL_FLAGS="--attention_resolutions 16 --large_size 256 --small_size 64 \
 --model_channels 128 --num_heads 4 --num_res_blocks 2 --resblock_updown True \
