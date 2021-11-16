@@ -6,7 +6,7 @@
 #SBATCH --nodelist=gpu01   # 指定属于上述partition的特定节点. 也可删除这一行, 由系统自动分配.
 #SBATCH --cpus-per-task=4  # 申请 cpu core 数; 可用内存与申请 cpu core 数成正比.
 #SBATCH --mem=20G
-#SBATCH --gres=gpu:3      # 申请 gpu 数
+#SBATCH --gres=gpu:2      # 申请 gpu 数
 #SBATCH -N 1               # 申请节点数,一般为1
 #SBATCH -t 2-00:00:00       # 申请Job运行时长0小时5分钟0秒, 若要申请超过一天时间, 如申请1天, 书写格式为#SBATCH -t 1-00:00:00
 # 上述 SBATCH 参数不指定时均有系统指定的默认值
@@ -32,7 +32,7 @@ MODEL_FLAGS="--attention_resolutions 16 --large_size 256 --small_size 64 \
 SCRIPT_FLAGS="--data_dir ../datasets/imagenet/train --data_info_dict_path data/train_data_info.pkl \
 --batch_size 4 --microbatch 2 \
 --run_time 47.8 \
---log_dir logs/sr_mean --log_interval 1 --save_interval 3 \
+--log_dir logs/sr_mean --log_interval 10 --save_interval 5000 \
 --model_save_dir checkpoints/sr_mean --resume_checkpoint model090000.pt \
 --debug_mode yes"
 
