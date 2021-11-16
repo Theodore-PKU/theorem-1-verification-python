@@ -24,7 +24,7 @@ master_addr=${line:12}
 line=($(awk 'NR==3 {print $0}' $file))
 master_port=${line:12}
 
-cd Home/ytxie/theorem-1-verification
+cd /home/ytxie/theorem-1-verification-python
 
 MODEL_FLAGS="--attention_resolutions 32,16,8 --class_cond True --large_size 256 --small_size 64 \
 --num_channels 192 --num_heads 4 --num_res_blocks 2 --learn_sigma True --resblock_updown True \
