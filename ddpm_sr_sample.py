@@ -14,9 +14,12 @@ from sr_var.ddpm.script_util import (
 
 
 def main():
+    logger.log("")
+    logger.log("theorem 1 verification: super-resolution sampling using ddpm sr model")
     args = create_argparser().parse_args()
 
     # distributed machines configuration
+    logger.log("making device configuration")
     is_distributed, rank = dist_util.setup_dist()
     logger.configure(args.log_dir, rank, is_distributed, is_write=False)
 
