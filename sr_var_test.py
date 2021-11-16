@@ -17,7 +17,7 @@ def main():
 
     # distributed machines configuration
     is_distributed, rank = dist_util.setup_dist()
-    logger.configure(args.save, rank, is_distributed, is_write=True)
+    logger.configure(args.log_dir, rank, is_distributed, is_write=True)
     logger.log("")
     logger.log("theorem 1 verification: super-resolution var estimation testing")
     logger.log("making device configuration...")  # pretend to make device configuration now :)
