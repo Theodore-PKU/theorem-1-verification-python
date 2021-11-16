@@ -92,7 +92,7 @@ class SRMeanTestLoop(TestLoop):
                 os.makedirs(output_dir, exist_ok=True)
 
             low_res.save(os.path.join(output_dir, f"low_res.png"))
-            mean_img.save(os.path.join(output_dir, f"high_res_mean.png"))
+            mean_img.save(os.path.join(output_dir, f"high_res_mean_{self.resume_step}.png"))
 
 
 def transform_to_uint8(image):

@@ -62,7 +62,7 @@ class SRVarTestLoop(TestLoop):
             output_dir = os.path.join(self.output_dir, file_name)
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir, exist_ok=True)
-            with open(os.path.join(output_dir, "high_res_var.pkl"), "wb") as f:
+            with open(os.path.join(output_dir, f"high_res_var_{self.resume_step}.pkl"), "wb") as f:
                 pickle.dump(var_output, f)
 
         # save to tensorboard
