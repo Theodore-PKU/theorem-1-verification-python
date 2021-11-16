@@ -1,3 +1,7 @@
+"""
+Unet-like models for mean and var estimation.
+"""
+
 import math
 import numpy as np
 import torch as th

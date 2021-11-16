@@ -1,3 +1,7 @@
+"""
+Helpers for main python code of super-resolution variance estimation task.
+"""
+
 from models.unet import UNetModel, VarianceModel
 
 

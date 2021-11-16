@@ -1,3 +1,7 @@
+"""
+Helpers for debugging code.
+"""
+
 import numpy as np
 import pynvml
 
