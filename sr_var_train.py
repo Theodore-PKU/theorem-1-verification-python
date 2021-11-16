@@ -12,7 +12,7 @@ from sr_var.var_utils import SRVarTrainLoop, load_train_data
 from sr_var.script_util import create_mean_model, var_model_defaults, create_var_model
 
 
-INITIAL_LOG_LOSS_SCALE = 20
+INITIAL_LOG_LOSS_SCALE = 20.0
 
 
 def main():

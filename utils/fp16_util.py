@@ -10,7 +10,7 @@ from .dist_util import dev
 from . import logger
 
 
-INITIAL_LOG_LOSS_SCALE = 20
+INITIAL_LOG_LOSS_SCALE = 20.0
 
 
 def convert_module_to_f16(m):
