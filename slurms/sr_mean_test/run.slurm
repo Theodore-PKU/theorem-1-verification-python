@@ -33,7 +33,7 @@ SCRIPT_FLAGS="--data_dir ../datasets/imagenet/train --data_info_dict_path data/t
 --batch_size 10 \
 --log_dir logs/sr_mean --output_dir outputs/sr_var \
 --model_path checkpoints/sr_mean/model105000.pt \
---debug_mode yes
+--debug_mode yes"
 
 python -m torch.distributed.launch \
 --nnodes=1 \
