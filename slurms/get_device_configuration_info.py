@@ -29,7 +29,7 @@ def main(args):
     nproc_per_node = params["#SBATCH --gres=gpu:"]
     master_addr = socket.gethostbyname(socket.gethostname())
     master_port = _find_free_port()
-    with open("slurm_params.txt", 'w') as f:
+    with open("/home/ytxie/theorem-1-verification-python/slurms/slurm_params.txt", 'w') as f:
         f.write("nproc_per_node={}\n".format(nproc_per_node))
         f.write("master_addr={}\n".format(master_addr))
         f.write("master_port={}\n".format(master_port))
