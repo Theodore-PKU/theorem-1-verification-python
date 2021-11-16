@@ -153,6 +153,8 @@ class TrainLoop:
         ):
             batch, label = next(self.data)
             self.run_step(batch, label)
+            self.step += 1
+
             if self.debug_mode and self.step % self.log_interval == 0:
                 show_gpu_usage(f"step: {self.step}, device: {dist.get_rank()}", idx=dist.get_rank())
 
@@ -171,11 +173,11 @@ class TrainLoop:
                 # Run for a finite amount of time in integration tests.
                 if os.environ.get("DIFFUSION_TRAINING_TEST", "") and self.step > 0:
                     return
-            self.step += 1
-            if self.step > self.max_step:
+
+            if self.step >= self.max_step:
                 break
         # Save the last checkpoint if it wasn't already saved.
-        if (self.step - 1) % self.save_interval != 0:
+        if self.step % self.save_interval != 0:
             self.save()
 
     def run_step(self, batch, label):
