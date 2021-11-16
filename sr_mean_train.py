@@ -15,14 +15,14 @@ INITIAL_LOG_LOSS_SCALE = 20
 
 
 def main():
-    logger.log("")
-    logger.log("theorem 1 verification: super-resolution mean estimation training")
     args = create_argparser().parse_args()
 
     # distributed machines configuration
-    logger.log("making device configuration")
     is_distributed, rank = dist_util.setup_dist()
     logger.configure(args.log_dir, rank, is_distributed, is_write=True)
+    logger.log("")
+    logger.log("theorem 1 verification: super-resolution mean estimation training")
+    logger.log("making device configuration...")  # pretend to make device configuration now :)
 
     logger.log("creating model...")
     if args.resume_checkpoint:

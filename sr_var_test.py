@@ -13,14 +13,14 @@ from sr_var.script_util import create_mean_model, var_model_defaults, create_var
 
 
 def main():
-    logger.log("")
-    logger.log("theorem 1 verification: super-resolution var estimation testing")
     args = create_argparser().parse_args()
 
     # distributed machines configuration
-    logger.log("making device configuration")
     is_distributed, rank = dist_util.setup_dist()
     logger.configure(args.save, rank, is_distributed, is_write=True)
+    logger.log("")
+    logger.log("theorem 1 verification: super-resolution var estimation testing")
+    logger.log("making device configuration...")  # pretend to make device configuration now :)
 
     logger.log("creating model...")
     model_args = load_args_dict(os.path.join(args.log_dir, "var_model_args.pkl"))
