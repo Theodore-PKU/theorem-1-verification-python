@@ -33,7 +33,7 @@ SCRIPT_FLAGS="--data_dir ../datasets/imagenet/train --data_info_dict_path data/t
 --batch_size 10 \
 --log_dir logs/sr_var --output_dir outputs/sr_var \
 --resume_checkpoint checkpoints/sr_var/model090910.pt \
---mean_model_path checkpoints/sr_mean/model090000.pt --mean_model_args_path logs/sr_mean \
+--mean_model_path checkpoints/sr_mean/model090000.pt --mean_model_args_path logs/sr_mean/mean_model_args.pkl \
 --debug_mode yes
 
 python -m torch.distributed.launch \
