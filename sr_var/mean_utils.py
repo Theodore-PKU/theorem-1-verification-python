@@ -23,7 +23,7 @@ class SRMeanTrainLoop(TrainLoop):
         super().__init__(*args, **kwargs)
 
     def _post_process(self, micro_input, micro_label, micro_output, i):
-        if self.step % (self.log_interval * 1) == 0 and i == 0:
+        if self.step % (self.log_interval * 100) == 0 and i == 0:
             micro_input = transform_to_uint8(micro_input)
             micro_label = transform_to_uint8(micro_label)
             micro_output = transform_to_uint8(micro_output)
