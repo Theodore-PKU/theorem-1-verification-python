@@ -14,14 +14,14 @@ from sr_var.ddpm.script_util import (
 
 
 def main():
-    logger.log("")
-    logger.log("theorem 1 verification: super-resolution sampling using ddpm sr model")
     args = create_argparser().parse_args()
 
     # distributed machines configuration
-    logger.log("making device configuration")
     is_distributed, rank = dist_util.setup_dist()
     logger.configure(args.log_dir, rank, is_distributed, is_write=False)
+    logger.log("")
+    logger.log("theorem 1 verification: super-resolution sampling using ddpm sr model")
+    logger.log("making device configuration...")  # pretend to make device configuration now :)
 
     # load a trianed ddpm sr_mean_train model and set eval mode.
     logger.log("creating model...")
