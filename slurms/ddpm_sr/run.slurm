@@ -16,7 +16,7 @@
 module add anaconda/3
 source activate pytorch1.9
 python ../get_device_configuration_info.py --slurm_file run.slurm
-file=../slurm_param.txt
+file=../slurm_params.txt
 line=($(awk 'NR==1 {print $0}' $file))
 nproc_per_node=${line:15}
 line=($(awk 'NR==2 {print $0}' $file))
