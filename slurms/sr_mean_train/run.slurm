@@ -32,7 +32,7 @@ MODEL_FLAGS="--attention_resolutions 16 --large_size 256 --small_size 64 \
 SCRIPT_FLAGS="--data_dir ../datasets/imagenet/train --data_info_dict_path data/train_data_info.pkl \
 --batch_size 4 --microbatch 2 \
 --run_time 47.8 \
---log_dir logs/sr_mean --log_interval 10 --save_interval 5000 \
+--log_dir logs/sr_mean --log_interval 5 --save_interval 10 \
 --model_save_dir checkpoints/sr_mean --resume_checkpoint model090000.pt \
 --debug_mode yes"
 
