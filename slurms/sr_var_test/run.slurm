@@ -32,9 +32,9 @@ MODEL_FLAGS="--attention_resolutions 16 --large_size 256 --small_size 64 \
 SCRIPT_FLAGS="--data_dir ../datasets/imagenet/train --data_info_dict_path data/to_sample_data_info.pkl \
 --batch_size 10 \
 --log_dir logs/sr_var --output_dir outputs/sr_var \
---resume_checkpoint checkpoints/sr_var/model090910.pt \
+--model_path checkpoints/sr_var/model050000.pt \
 --mean_model_path checkpoints/sr_mean/model090000.pt --mean_model_args_path logs/sr_mean/mean_model_args.pkl \
---debug_mode yes
+--debug_mode yes"
 
 python -m torch.distributed.launch \
 --nnodes=1 \
