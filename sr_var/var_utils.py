@@ -24,7 +24,7 @@ class SRVarTrainLoop(TrainLoop):
         super().__init__(*args, **kwargs)
 
     def _post_process(self, micro_input, micro_label, micro_output, i):
-        if self.step % (self.log_interval * 100) == 0 and i == 0:
+        if self.step % (self.log_interval * 1) == 0 and i == 0:
             micro_low_res = transform_to_uint8(micro_input[:, 0:3, ...])
             micro_high_res_mean = transform_to_uint8(micro_input[:, 3:6, ...])
             micro_label = var_transform_std_image(micro_label)

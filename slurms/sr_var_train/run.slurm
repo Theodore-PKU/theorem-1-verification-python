@@ -30,12 +30,12 @@ MODEL_FLAGS="--attention_resolutions 16 --large_size 256 --small_size 64 \
 --model_channels 128 --num_heads 4 --num_res_blocks 2 --resblock_updown True \
 --use_fp16 True --channel_mult 1,1,2,2,4 --last_layer_type none"
 SCRIPT_FLAGS="--data_dir ../datasets/imagenet/train --data_info_dict_path data/train_data_info.pkl \
---batch_size 64 --microbatch 8 \
+--batch_size 4 --microbatch 2 \
 --run_time 47.8 \
---log_dir logs/sr_var --log_interval 10 --save_interval 5000 \
---model_save_dir checkpoints/sr_var --resume_checkpoint model090910.pt \
+--log_dir logs/sr_var --log_interval 5 --save_interval 10 \
+--model_save_dir checkpoints/sr_var --resume_checkpoint model050000.pt \
 --mean_model_path checkpoints/sr_mean/model090000.pt --mean_model_args_path logs/sr_mean \
---debug_mode yes
+--debug_mode yes"
 
 python -m torch.distributed.launch \
 --nnodes=1 \
