@@ -6,7 +6,6 @@ import os
 import blobfile as bf
 from skimage.metrics import peak_signal_noise_ratio
 import torch as th
-import torch.nn.functional as F
 
 from sr_var.base_dataset import center_crop_arr
 from sr_var.mean_utils import tile_image
