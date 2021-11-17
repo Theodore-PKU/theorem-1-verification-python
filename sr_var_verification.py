@@ -237,15 +237,15 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_dir", type=str, default="../datasets/imagenet/train")
-    parser.add_argument("--data_info_dict_path", type=str, default="data/to_sample_data_info.pkl")
+    parser.add_argument("--data_info_dict_path", type=str, default="data/sr_imagenet/to_sample_data_info.pkl")
     parser.add_argument("--large_size", type=int, default=256)
     parser.add_argument("--ddpm_sr_output_dir", type=str, default="outputs/ddpm_sr/64_256_step_250")
     parser.add_argument("--num_samples", type=int, default=100)
-    parser.add_argument("--sr_model_output_dir", type=str, default="outputs/sr_var")
+    parser.add_argument("--sr_model_output_dir", type=str, default="outputs/sr_var/64_256")
     # these two params are to indicate which model to compare.
     parser.add_argument("--mean_model_step", type=int, default=90000)
     parser.add_argument("--var_model_step", type=int, default=50000)
-    parser.add_argument("--log_dir", type=str, default="logs/sr_compare")
+    parser.add_argument("--log_dir", type=str, default="logs/sr_compare/64_256")
     args = parser.parse_args()
 
     main(args)
