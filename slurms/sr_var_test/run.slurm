@@ -29,11 +29,11 @@ cd /home/ytxie/theorem-1-verification-python
 MODEL_FLAGS="--attention_resolutions 16 --large_size 256 --small_size 64 \
 --model_channels 128 --num_heads 4 --num_res_blocks 2 --resblock_updown True \
 --use_fp16 True --channel_mult 1,1,2,2,4 --last_layer_type none"
-SCRIPT_FLAGS="--data_dir ../datasets/imagenet/train --data_info_dict_path data/to_sample_data_info.pkl \
+SCRIPT_FLAGS="--data_dir ../datasets/imagenet/train --data_info_dict_path data/sr_imagenet/to_sample_data_info.pkl \
 --batch_size 10 \
---log_dir logs/sr_var --output_dir outputs/sr_var \
---model_path checkpoints/sr_var/model050000.pt \
---mean_model_path checkpoints/sr_mean/model090000.pt --mean_model_args_path logs/sr_mean/mean_model_args.pkl \
+--log_dir logs/sr_var/64_256 --output_dir outputs/sr_var/64_256 \
+--model_path checkpoints/sr_var/64_256/model050000.pt \
+--mean_model_path checkpoints/sr_mean/64_256/model090000.pt --mean_model_args_path logs/sr_mean/64_256/mean_model_args.pkl \
 --debug_mode yes"
 
 python -m torch.distributed.launch \

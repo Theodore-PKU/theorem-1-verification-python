@@ -30,10 +30,10 @@ MODEL_FLAGS="--attention_resolutions 32,16,8 --class_cond True --large_size 256 
 --num_channels 192 --num_heads 4 --num_res_blocks 2 --learn_sigma True --resblock_updown True \
 --use_fp16 False --use_scale_shift_norm True"
 GD_FLAGS="--diffusion_steps 1000 --noise_schedule linear --learn_sigma True --timestep_respacing 250"
-SCRIPT_FLAGS="--log_dir logs/ddpm_sr/step_250 --output_dir outputs/ddpm_sr/step_250 \
+SCRIPT_FLAGS="--log_dir logs/ddpm_sr/64_256_step_250 --output_dir outputs/ddpm_sr/64_256_step_250 \
 --data_dir ../datasets/imagenet/train --model_path checkpoints/ddpm_sr/64_256_upsampler.pt \
---to_sample_images_dict_path data/to_sample_data_info.pkl \
---num_samples_per_image 6 --batch_size 2"
+--to_sample_images_dict_path data/sr_imagenet/to_sample_data_info.pkl \
+--num_samples_per_image 100 --batch_size 10"
 
 python -m torch.distributed.launch \
 --nnodes=1 \
