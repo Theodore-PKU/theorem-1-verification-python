@@ -9,8 +9,6 @@ import logging
 from tensorboardX import SummaryWriter
 import torch.distributed as dist
 
-def test_func():
-    print("xxx")
 
 # ================================================================
 # API
