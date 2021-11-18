@@ -34,6 +34,8 @@ class SRVarTrainLoop(TrainLoop):
             high_res_mean_tiled_images = tile_image(micro_high_res_mean, ncols=ncols, nrows=1)
             label_tiled_images = tile_image(micro_label, ncols=ncols, nrows=1)
             output_tiled_images = tile_image(micro_output, ncols=ncols, nrows=1)
+            # image alignment:
+            # low res | high res mean estimation from mean model | high res var estimation | error map label
             all_tiled_images = th.cat(
                 [low_res_tiled_images, high_res_mean_tiled_images, output_tiled_images, label_tiled_images], dim=1
             )
@@ -71,6 +73,8 @@ class SRVarTestLoop(TestLoop):
         ncols = len(batch)
         input_tiled_images = tile_image(batch, ncols=ncols, nrows=1)
         output_tiled_images = tile_image(output, ncols=ncols, nrows=1)
+        # image alignment:
+        # low res | high res var estimation
         all_tiled_images = th.cat(
             [input_tiled_images, output_tiled_images], dim=1
         )

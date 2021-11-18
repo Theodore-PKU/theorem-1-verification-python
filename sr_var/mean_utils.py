@@ -31,6 +31,8 @@ class SRMeanTrainLoop(TrainLoop):
             input_tiled_images = tile_image(micro_input, ncols=ncols, nrows=1)
             label_tiled_images = tile_image(micro_label, ncols=ncols, nrows=1)
             output_tiled_images = tile_image(micro_output, ncols=ncols, nrows=1)
+            # image alignment:
+            # low res | high res mean estimation | high res label
             all_tiled_images = th.cat(
                 [input_tiled_images, output_tiled_images, label_tiled_images], dim=1
             )
@@ -60,6 +62,8 @@ class SRMeanTestLoop(TestLoop):
         ncols = len(batch)
         input_tiled_images = tile_image(batch, ncols=ncols, nrows=1)
         output_tiled_images = tile_image(output, ncols=ncols, nrows=1)
+        # image alignment:
+        # low res | high res mean estimation
         all_tiled_images = th.cat(
             [input_tiled_images, output_tiled_images], dim=1
         )
