@@ -2,8 +2,8 @@
 #SBATCH -J ddpm_sr          # Job名
 #SBATCH -o ./sysout.txt  # 输出, 目录./out必须存在, 否则无法成功提交job. 也可删除此行由系统自动指定.
 #SBATCH --qos=short       # qos(quality of service): normal (1 job, 1 gpu), short (3 job, 3 gpu), debug (1 job, 1 gpu)
-#SBATCH -p RTX3090        # 指定partition: V100(gpu00), RTX3090(gpu01), geforce(gpu02, gpu03), etc.
-#SBATCH --nodelist=gpu01   # 指定属于上述partition的特定节点. 也可删除这一行, 由系统自动分配.
+#SBATCH -p V100        # 指定partition: V100(gpu00), RTX3090(gpu01), geforce(gpu02, gpu03), etc.
+#SBATCH --nodelist=gpu00   # 指定属于上述partition的特定节点. 也可删除这一行, 由系统自动分配.
 #SBATCH --cpus-per-task=4  # 申请 cpu core 数; 可用内存与申请 cpu core 数成正比.
 #SBATCH --mem=20G
 #SBATCH --gres=gpu:3      # 申请 gpu 数
@@ -26,14 +26,16 @@ master_port=${line:12}
 
 cd /home/ytxie/theorem-1-verification-python
 
-MODEL_FLAGS="--attention_resolutions 32,16,8 --class_cond True --large_size 256 --small_size 64 \
---num_channels 192 --num_heads 4 --num_res_blocks 2 --learn_sigma True --resblock_updown True \
---use_fp16 False --use_scale_shift_norm True"
+cd /home/ytxie/theorem-1-verification-python
+
+MODEL_FLAGS="--attention_resolutions 32,16 --class_cond True --large_size 512 --small_size 128 \
+--num_channels 192 --num_head_channels 64 --num_res_blocks 2 --learn_sigma True --resblock_updown True \
+--use_fp16 True --use_scale_shift_norm True"
 GD_FLAGS="--diffusion_steps 1000 --noise_schedule linear --learn_sigma True --timestep_respacing 250"
-SCRIPT_FLAGS="--log_dir logs/ddpm_sr/64_256_step_250 --output_dir outputs/ddpm_sr/64_256_step_250 \
---data_dir ../datasets/imagenet/train --model_path checkpoints/ddpm_sr/64_256_upsampler.pt \
+SCRIPT_FLAGS="--log_dir logs/ddpm_sr/128_512_step_250 --output_dir outputs/ddpm_sr/128_512_step_250 \
+--data_dir ../datasets/imagenet/train --model_path checkpoints/ddpm_sr/128_512_upsampler.pt \
 --to_sample_images_dict_path data/sr_imagenet/to_sample_data_info.pkl \
---num_samples_per_image 100 --batch_size 10"
+--num_samples_per_image 3 --batch_size 1"
 
 python -m torch.distributed.launch \
 --nnodes=1 \
