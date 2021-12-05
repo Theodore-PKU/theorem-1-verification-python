@@ -18,9 +18,9 @@ source activate pytorch1.9
 
 cd /home/ytxie/theorem-1-verification-python
 
-SCRIPT_FLAGS="--model_save_dir checkpoints/mnist_classification/model_noise_label_0.3 \
---resume_checkpoint model002000.pt \
---task predict_analysis --alpha 0.3 \
---noise_type model --noise_label_file model_noisy_label_0.3.pkl"
+SCRIPT_FLAGS="--model_save_dir checkpoints/mnist_classification/model_noisy_label_0.4 \
+--resume_checkpoint model020000.pt \
+--task predict_analysis --alpha 0.4 \
+--noise_type model --noise_label_file model_noisy_label_0.4.pkl"
 
 python mnist_classification.py $SCRIPT_FLAGS
