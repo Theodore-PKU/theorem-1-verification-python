@@ -423,9 +423,6 @@ class PredictAnalysisLoop(TestLoop):
                     self.save_right_predict(batch[i], category, category_pred, prob[i], pred_prob[i])
 
     def print_predict_analysis(self):
-        wrong_predict_count = np.sum(self.category_wrong_predict)
-        print((self.num_data - wrong_predict_count) / self.num_data)
-
         # compute averagey predict prob
         self.category_predict_prob = self.category_predict_prob / self.category_predict.reshape(10, 1)
         self.category_wrong_predict_prob = self.category_wrong_predict_prob / \
