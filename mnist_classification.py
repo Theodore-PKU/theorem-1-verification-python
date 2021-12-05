@@ -180,8 +180,8 @@ def create_argparser():
         log_interval=10,
         save_interval=2000,
         # model path
-        model_save_dir="checkpoints/mnist_classification/model_noisy_label_0.5",
-        resume_checkpoint="model004000.pt",
+        model_save_dir="",
+        resume_checkpoint="",
         # task, "train" or "predict_analysis" or
         # "generate_noisy_label" or "train_on_noisy_label"
         task="predict_analysis",
