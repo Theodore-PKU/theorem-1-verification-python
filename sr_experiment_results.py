@@ -35,7 +35,7 @@ def main(args):
             pil_image.load()
         pil_image = pil_image.convert("RGB")
         arr = center_crop_arr(pil_image, args.large_size)
-        ground_truth_image = np2th(arr).clamp(0, 255).to(th.uint8).numpy()
+        ground_truth_image = th.from_numpy(arr).clamp(0, 255).to(th.uint8).numpy()
 
         ddpm_sr_mean_image = read_image_numpy(os.path.join(args.ddpm_sr_output_dir, file_name, "high_res_mean.png"))
         ddpm_sr_var = read_pkl_numpy(os.path.join(args.ddpm_sr_output_dir, file_name, "high_res_var.pkl"))
