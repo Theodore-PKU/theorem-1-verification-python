@@ -53,36 +53,36 @@ def main(args):
     #     ddpm_sr_std = np.sqrt(ddpm_sr_var)
     #     model_std = np.sqrt(model_var)
     #
-    #     for matrix in [
+    #     for metric in [
     #         "ddpm_sr_mean_vs_groud_truth",
     #         "model_mean_vs_groud_truth",
     #         "model_mean_vs_ddpm_sr_mean",
     #         "model_var_vs_ddpm_sr_var",
     #     ]:
-    #         if matrix == "ddpm_sr_mean_vs_groud_truth":
+    #         if metric == "ddpm_sr_mean_vs_groud_truth":
     #             a = ddpm_sr_mean_image
     #             b = ground_truth_image
-    #         elif matrix == "model_mean_vs_groud_truth":
+    #         elif metric == "model_mean_vs_groud_truth":
     #             a = model_mean_image
     #             b = ground_truth_image
-    #         elif matrix == "model_mean_vs_ddpm_sr_mean":
+    #         elif metric == "model_mean_vs_ddpm_sr_mean":
     #             a = model_mean_image
     #             b = ddpm_sr_mean_image
     #         else:
     #             a = model_std
     #             b = ddpm_sr_std
-    #         mse_dict[matrix].append(compute_mse(a, b))
-    #         psnr_dict[matrix].append(compute_psnr(a, b))
-    #         nmse_dict[matrix].append(compute_nmse(a, b))
-    # for matrix in [
+    #         mse_dict[metric].append(compute_mse(a, b))
+    #         psnr_dict[metric].append(compute_psnr(a, b))
+    #         nmse_dict[metric].append(compute_nmse(a, b))
+    # for metric in [
     #     "ddpm_sr_mean_vs_groud_truth",
     #     "model_mean_vs_groud_truth",
     #     "model_mean_vs_ddpm_sr_mean",
     #     "model_var_vs_ddpm_sr_var",
     # ]:
-    #     logger.log(f"{matrix}: MSE,  {np.mean(mse_dict[matrix]):.4f}")
-    #     logger.log(f"{matrix}: PSNR, {np.mean(psnr_dict[matrix]):.4f}")
-    #     logger.log(f"{matrix}: NMSE, {np.mean(nmse_dict[matrix]):.4f}")
+    #     logger.log(f"{metric}: MSE,  {np.mean(mse_dict[matrix]):.4f}")
+    #     logger.log(f"{metric}: PSNR, {np.mean(psnr_dict[matrix]):.4f}")
+    #     logger.log(f"{metric}: NMSE, {np.mean(nmse_dict[matrix]):.4f}")
 
     n = 7
     to_sample_data_info_list = np.random.choice(to_sample_data_info_list, n * 8, replace=False)
