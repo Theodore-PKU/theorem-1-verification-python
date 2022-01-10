@@ -133,7 +133,7 @@ def main(args):
             big_image_list = th.cat(big_image_list, dim=1)
             big_image = big_image_list.permute(1, 2, 0).numpy()
             pil_image = Image.fromarray(big_image)
-            pil_image.save(f"samples_{num_samples}.pdf")
+            pil_image.save(f"samples_{num_samples}.jpeg")
             num_samples += 1
             big_image_list = []
             count = 0
