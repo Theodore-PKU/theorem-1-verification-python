@@ -201,14 +201,14 @@ def create_argparser():
         log_interval=10,
         save_interval=2000,
         # model path
-        model_save_dir="",  # when generate model noisy label, it should be
+        model_save_dir="checkpoints/mnist_classification/uniform_noisy_label_0.2333",  # when generate model noisy label, it should be
         # checkpoints/mnist_classification/original, otherwise it is dependent on noise type.
-        resume_checkpoint="",  # when train_on_noisy_label, it should be "", otherwise it should be set.
-        task="train_on_noisy_label",  # task, "train" or "predict_analysis" or
+        resume_checkpoint="model020000.pt",  # when train_on_noisy_label, it should be "", otherwise it should be set.
+        task="draw_pictures",  # task, "train" or "predict_analysis" or
         # "generate_noisy_label" or "train_on_noisy_label" or "draw_pictures"
-        alpha=0.6229,  # only used when task is "generate_noisy_label"
-        noise_type="model",  # only used when task is "generate_noisy_label" or "predict_analysis"
-        noise_label_file="model_noisy_label_0.8.pkl"
+        alpha=0.2333,  # only used when task is "generate_noisy_label"
+        noise_type="uniform",  # only used when task is "generate_noisy_label" or "predict_analysis"
+        noise_label_file="uniform_noisy_label_0.2333.pkl"
         # only used when task is "predict_analysis" or "train_on_noisy_label"
     )
     # add model args to `defaults` dict
