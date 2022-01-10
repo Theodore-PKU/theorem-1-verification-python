@@ -10,6 +10,7 @@ from utils.script_util import add_dict_to_argparser, args_to_dict, load_args_dic
 from classification.utils import (
     create_model, model_defaults, load_train_data, load_test_data, TrainLoop,
     PredictAnalysisLoop, load_ordered_data, GenNoisyLabelLoop, NoiseCETrainLoop,
+    DrawPictures,
 )
 
 
@@ -98,6 +99,26 @@ def main():
 
         logger.log("complete analysing.\n")
 
+    elif args.task == "draw_pictures":
+        logger.log("creating data loader...")
+        data = load_test_data(
+            args.data_dir,
+            args.batch_size,
+            noise_label_file=args.noise_label_file,
+            is_train=True,
+        )
+
+        logger.log("draw pictures...")
+        DrawPictures(
+            model=model,
+            test_data=data,
+            noise_type=args.noise_type,
+            model_save_dir=args.model_save_dir,
+            resume_checkpoint=args.resume_checkpoint,
+        ).run_loop()
+
+        logger.log("complete drawing pictures.\n")
+
     elif args.task == "generate_noisy_label":
         if args.noise_type != "model":
             model = None
@@ -182,10 +203,9 @@ def create_argparser():
         # model path
         model_save_dir="",  # when generate model noisy label, it should be
         # checkpoints/mnist_classification/original, otherwise it is dependent on noise type.
-        resume_checkpoint="",  # when generate model noisy label, it should be
-        # model020000.pt, otherwise it should be "".
+        resume_checkpoint="",  # when train_on_noisy_label, it should be "", otherwise it should be set.
         task="train_on_noisy_label",  # task, "train" or "predict_analysis" or
-        # "generate_noisy_label" or "train_on_noisy_label"
+        # "generate_noisy_label" or "train_on_noisy_label" or "draw_pictures"
         alpha=0.6229,  # only used when task is "generate_noisy_label"
         noise_type="model",  # only used when task is "generate_noisy_label" or "predict_analysis"
         noise_label_file="model_noisy_label_0.8.pkl"

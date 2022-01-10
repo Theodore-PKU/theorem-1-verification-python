@@ -19,6 +19,15 @@ from models.sim_cnn import SimpleCNN
 from .mnist_dataset import load_data, MNISTDataset
 
 
+LD = 2
+MS = 10
+LINE1 = 'rv-.'
+LINE2 = 'g^--'
+LABEL_SIZE = 25
+TICK_SIZE = 15
+LEGEND_SIZE = 20
+
+
 # ================================================================
 # TrainLoop and TestLoop
 # ================================================================
@@ -484,6 +493,157 @@ class PredictAnalysisLoop(TestLoop):
         plt.xlabel("category")
         plt.title(f"label: {category}, pred: {category_pred}")
         plt.legend(["pred prob", "sample prob"])
+        plt.savefig("temp.png")
+        plt.close()
+        self._save_image_to_tensorboard("right_pred_prob", self.pred_right_count)
+        logger.get_current().write_image(
+            'input_of_right_pred',
+            image,
+            self.pred_right_count
+        )
+
+    def _save_image_to_tensorboard(self, name, step):
+        with open("temp.png", "rb") as f:
+            pil_image = Image.open(f)
+            pil_image.load()
+        pil_image = pil_image.convert("RGB")
+        th_image = th.Tensor(np.array(pil_image)).permute(2, 0, 1) / 255.
+        logger.get_current().write_image(
+            name,
+            th_image,
+            step,
+        )
+        os.remove("temp.png")
+
+
+class DrawPictures(TestLoop):
+
+    def __init__(self, noise_type, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.category_predict_prob = np.zeros((10, 10))
+        self.category_predict = np.zeros(10, dtype=np.int)
+        self.category_wrong_predict_prob = np.zeros((10, 10))
+        self.category_wrong_predict = np.zeros((10, 10), dtype=np.int)
+        self.category_noise_prob = np.zeros((10, 10))
+        self.pred_wrong_count = 0
+        self.pred_right_count = 0
+        self.max_figures = 200
+        self.noise_type = noise_type
+        self.ce_loss_q = 0.
+
+    def run_loop(self):
+        plt.set_loglevel('WARNING')
+        for batch, clean_label, noisy_label, prob in self.test_data:
+            self.forward_backward(batch, clean_label, noisy_label, prob)
+            if self.step % 100 == 0:
+                logger.log(f"have run {self.step} steps")
+
+        self.accuracy = self.accuracy / self.num_data
+        self.ce_loss = self.ce_loss / self.num_data
+        if self.noise_type == "model":
+            self.ce_loss_q = self.ce_loss_q / self.num_data
+        else:
+            self.ce_loss_q = 0.
+        logger.log(f"accuracy : {self.accuracy:.4f}")
+        logger.log(f"average ce loss: {self.ce_loss:.4f}")
+        logger.log(f"average ce loss q: {self.ce_loss_q:.4f}")
+
+        self.print_predict_analysis()
+
+    def _cross_entropy(self, prop1, prop2, softmax=True):
+        if softmax:
+            prop2 = F.softmax(prop2, dim=1)
+        return th.sum(- prop1 * th.log(prop2), dim=1)
+
+    def forward_backward(self, batch, clean_label, noisy_label, prob):
+        self.step += 1
+        batch = batch.to(dist_util.dev())
+        clean_label = clean_label.to(dist_util.dev())
+        prob = prob.to(dist_util.dev())
+
+        with th.no_grad():
+            output = self.model(batch)
+        pred = th.argmax(output, dim=1)
+        self.ce_loss += th.sum(self._cross_entropy(prob, output, softmax=True))
+        if self.noise_type == "model":
+            self.ce_loss_q += th.sum(self._cross_entropy(prob, prob, softmax=False))
+        self.accuracy += th.sum(pred == clean_label)
+        self.num_data += len(batch)
+
+        prob = prob.detach().cpu().numpy()
+        pred_prob = F.softmax(output, dim=1).detach().cpu().numpy()
+        for i in range(len(clean_label)):
+            category = int(clean_label[i])
+            category_pred = int(pred[i])
+            self.category_predict[category] += 1
+            self.category_predict_prob[category] += pred_prob[i]
+            self.category_noise_prob[category] += prob[i]
+            if category_pred != category:
+                self.pred_wrong_count += 1
+                if self.pred_wrong_count <= self.max_figures:
+                    self.save_wrong_predict(batch[i], category, category_pred, prob[i], pred_prob[i])
+            else:
+                self.pred_right_count += 1
+                if self.pred_right_count <= self.max_figures:
+                    self.save_right_predict(batch[i], category, category_pred, prob[i], pred_prob[i])
+
+    def print_predict_analysis(self):
+        # compute averagey predict prob
+        self.category_predict_prob = self.category_predict_prob / self.category_predict.reshape(10, 1)
+        self.category_noise_prob = self.category_noise_prob / self.category_predict.reshape(10, 1)
+
+        for i in range(10):
+            x_data = [str(i) for i in range(10)]
+            plt.figure()
+            plt.plot(x_data, self.category_predict_prob[i], LINE1, linewidth=LD, markersize=MS)
+            plt.plot(x_data, self.category_noise_prob[i], LINE2, linewidth=LD, markersize=MS)
+            label_font = {'family': 'Times New Roman', 'weight': 'normal', 'size': LABEL_SIZE}
+            plt.ylabel("probability", label_font)
+            plt.xlabel("category", label_font)
+            legend_font = {'family': 'Times New Roman', 'weight': 'normal', 'size': LEGEND_SIZE}
+            plt.legend(["prediction", "noise"], prop=legend_font)
+            plt.tick_params(labelsize=TICK_SIZE)
+            # plt.title(f"prediction for category {i} with noise of {self.noise_type}")
+            plt.tight_layout()
+            plt.savefig("temp.png")
+            plt.close()
+            self._save_image_to_tensorboard("predict_analysis", i)
+
+    def save_wrong_predict(self, image, category, category_pred, prob, pred_prob):
+        x_data = [str(i) for i in range(10)]
+        plt.figure()
+        plt.plot(x_data, pred_prob, LINE1, linewidth=LD, markersize=MS)
+        plt.plot(x_data, prob, LINE2, linewidth=LD, markersize=MS)
+        label_font = {'family': 'Times New Roman', 'weight': 'normal', 'size': LABEL_SIZE}
+        plt.ylabel("probability", label_font)
+        plt.xlabel("category", label_font)
+        plt.tick_params(labelsize=TICK_SIZE)
+        # plt.title(f"label: {category}, pred: {category_pred}")
+        legend_font = {'family': 'Times New Roman', 'weight': 'normal', 'size': LEGEND_SIZE}
+        plt.legend(["prediction", "noise"], prop=legend_font)
+        plt.tight_layout()
+        plt.savefig("temp.png")
+        plt.close()
+        self._save_image_to_tensorboard("wrong_pred_prob", self.pred_wrong_count)
+        logger.get_current().write_image(
+            'input_of_wrong_pred',
+            image,
+            self.pred_wrong_count
+        )
+
+    def save_right_predict(self, image, category, category_pred, prob, pred_prob):
+        x_data = [str(i) for i in range(10)]
+        plt.figure()
+        plt.plot(x_data, pred_prob, LINE1, linewidth=LD, markersize=MS)
+        plt.plot(x_data, prob, LINE2, linewidth=LD, markersize=MS)
+        label_font = {'family': 'Times New Roman', 'weight': 'normal', 'size': LABEL_SIZE}
+        plt.ylabel("probability", label_font)
+        plt.xlabel("category", label_font)
+        plt.tick_params(labelsize=TICK_SIZE)
+        # plt.title(f"label: {category}, pred: {category_pred}")
+        legend_font = {'family': 'Times New Roman', 'weight': 'normal', 'size': LEGEND_SIZE}
+        plt.legend(["prediction", "noise"], prop=legend_font)
+        plt.tight_layout()
         plt.savefig("temp.png")
         plt.close()
         self._save_image_to_tensorboard("right_pred_prob", self.pred_right_count)
