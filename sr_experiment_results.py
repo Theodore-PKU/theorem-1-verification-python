@@ -99,11 +99,11 @@ def main(args):
         arr = center_crop_arr(pil_image, args.large_size)
         high_res_gt = np2th(arr).clamp(0, 255).to(th.uint8)
 
-        low_res_gt = np2th(
-            read_image_numpy(os.path.join(args.sr_model_output_dir, file_name, "low_res.png"))
+        mean_image_gt = np2th(
+            read_image_numpy(os.path.join(args.ddpm_sr_output_dir, file_name, "high_res_mean.png"))
         ).clamp(0, 255).to(th.uint8)
 
-        high_res_mean_gt = np2th(
+        mean_image_model = np2th(
             read_image_numpy(os.path.join(args.sr_model_output_dir, file_name,
                                           f"high_res_mean_{args.mean_model_step}.png"))
         ).clamp(0, 255).to(th.uint8)
@@ -119,13 +119,13 @@ def main(args):
         std_image_model = np.sqrt(var_image_model)
         std_image_model = np2th(std_image_model / np.max(std_image_model) * 255.).clamp(0, 255).to(th.uint8)
 
-        abs_error_map = th.abs(high_res_gt - high_res_mean_gt)
+        abs_error_map = th.abs(high_res_gt - mean_image_model)
         abs_error_map = (abs_error_map / th.max(abs_error_map) * 255.).to(th.uint8)
 
         # The image alignment is:
         # groun truth high res from imagenet | low res | high res mean estimation by mean model
         #   abs(high_res - high_res-mean)  | std of ddpm | std estimation by var model
-        multi_images = th.cat([high_res_gt, low_res_gt, high_res_mean_gt,
+        multi_images = th.cat([high_res_gt, mean_image_gt, mean_image_model,
                                abs_error_map, std_image_gt, std_image_model], dim=0)
         multi_images = tile_image(multi_images, ncols=6, nrows=1)
         big_image_list.append(multi_images)
