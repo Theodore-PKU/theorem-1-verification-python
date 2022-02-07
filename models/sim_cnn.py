@@ -1,5 +1,5 @@
 """
-A very simple CNN for MNIST classification
+A very simple CNN for MNIST classification. Based on Zifan Chen's codd.
 """
 
 

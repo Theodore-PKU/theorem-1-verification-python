@@ -1,5 +1,5 @@
 """
-Various utilities for neural networks.
+Various utilities for neural networks from https://github.com/openai/guided-diffusion.
 """
 
 import torch as th

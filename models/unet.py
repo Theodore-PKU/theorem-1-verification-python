@@ -1,5 +1,5 @@
 """
-Unet-like models for mean and var estimation.
+Unet-like models for mean and var estimation. Based on https://github.com/openai/guided-diffusion.
 """
 
 import math
